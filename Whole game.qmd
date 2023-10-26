@@ -37,7 +37,7 @@ By reading this book \[R4DS\] ([R for Data Science (2e) (hadley.nz)](https://r4d
 
 -   An R **package** is a collection of functions, data, and documentation that extends the capabilities of base R. All packages in the tidyverse share a common philosophy of data and R programming and are designed to work together.
 
-    ## Data Vizualization
+### Data Visualization
 
 ggplot2 implements the **grammar of graphics**, a coherent system for describing and building graphs.
 
@@ -51,7 +51,7 @@ require(palmerpenguins) # Contains the penguins dataset and comes with base R
 require(ggthemes) # Contains the package that offers a colorblind safe color palette
 ```
 
-### First steps
+#### First steps
 
 We may be curious to know if penguins with longer flippers weigh more or less than penguins with shorter flippers? We may probably have an answer to this but can we try to make our answer very precise. Is there a relationship between flipper length and body mass, if so, what does it look like? Is it a negative relationship( i.e. higher length usually means lower body mass)? Is it a linear relationship or nonlinear? Does the relationship vary by the species of the penguin (e.g. say red penguins have nonlinear relationships whiles other penguins have linear relationships)? Does the island where the penguin live make a difference?
 
@@ -86,11 +86,11 @@ dplyr::glimpse(penguins)
 ?penguins # this gives us more information on understanding the penguins data
 ```
 
-### Ultimate Goal
+#### Ultimate Goal
 
 Our ultimate goal is to be able to create a visualization displaying the relationship between flipper lengths and body masses of these penguins, taking into consideration the species types of the penguins
 
-#### Creating a ggplot
+##### Creating a ggplot
 
 With ggplot2, we begin a plot with the function `ggplot()`, defining a plot object that we can then add **layers** to.
 
@@ -133,7 +133,7 @@ We now have something that looks like what we might think of as a "scatterplot" 
 
 "What does the relationship between flipper length and body mass look like?" - The relationship appears to be positive (as flipper length increases, so does body mass), it appears fairly linear (the points are clustered around a line instead of a curve), it also appears moderately strong (there isn't too much scatter around such a line). So penguins with longer flippers are generally larger in terms of their body mass (Like we might have guessed in the beginning).
 
-### Adding aesthetics and layers
+#### Adding aesthetics and layers
 
 Scatterplots are useful for displaying the relationship between two numerical variables, but it's always a good idea to be skeptical of any apparent relationship between two variables and ask if there may be other variables that explain or change the nature of this apparent relationship. e.g. like our ultimate goal, we want to know whether this relationship we see in penguins differ when we dive in to investigate the relationship by species of penguins. To do this, we incorporate species into our plot and find out if it reveals any insights.
 
@@ -215,7 +215,7 @@ ggplot2::ggplot(
   ggthemes::scale_color_colorblind()
 ```
 
-### 2.2.5 Exercise
+#### 2.2.5 Exercise
 
 1.  There are `r nrow(penguins)` rows and `r ncol(penguins)` columns in `penguins`.
 
@@ -315,11 +315,11 @@ ggplot(
   geom_smooth(se = FALSE)
 ```
 
-### Visualizing Distributions
+#### Visualizing Distributions
 
 How can we understand how a variable behaves? We can visualize the **distribution** of a variable to understand which values of the variable are common. The distribution depends on the type of variable; categorical or numerical.
 
-#### A categorical variable
+##### A categorical variable
 
 A variable is **categorical** if it can only take one of a small set of values. Bar charts are a great way to examine the distribution of a categorical variable. The height of the bars displays how many observations occurred with each `x` value. The graph below shows an example of a bar chart
 
@@ -335,7 +335,7 @@ ggplot(palmerpenguins::penguins, aes(x = fct_infreq(species))) +
   geom_bar()
 ```
 
-#### A numerical variable
+##### A numerical variable
 
 A variable is **numerical** (or quantitative) if it can take on a wide range of numerical values, and it is sensible to add, subtract, or take averages with those values. Numerical values can be continuous (measurable e.g. weight, height) or discrete (count). One common used visualization for distributions of continuous variables is a histogram.
 
@@ -392,11 +392,11 @@ ggplot(diamonds, aes(x = carat)) +
   geom_histogram(bins = 30)
 ```
 
-### Visualizing relationships
+#### Visualizing relationships
 
 To visualize a relationship we need to have at least two variables mapped to aesthetics of a plot.
 
-#### A numerical and a categorical variable
+##### A numerical and a categorical variable
 
 To visualize the relationship between a numerical and a categorical variable we can use side-by-side box plots. A **boxplot** is a type of visual shorthand for measures of position (percentiles) that describe a distribution. It is also useful for identifying potential outliers
 
@@ -424,7 +424,7 @@ ggplot(penguins, aes(x = body_mass_g, color = species, fill = species)) +
 
 -   Otherwise, we *set* the value of an aesthetic. This defaults all points to this aesthetic e.g. color = red
 
-#### Two categorical variables
+##### Two categorical variables
 
 We can use stacked bar plots to visualize the relationship between two categorical variables.
 
@@ -450,7 +450,7 @@ ggplot(penguins, aes(x = island, fill = species)) +
 
 In creating these bar charts, we map the variable that will be separated into bars to the `x` aesthetic, and the variable that will change the colors inside the bars to the `fill` aesthetic
 
-#### Two numerical variables
+##### Two numerical variables
 
 Scatterplots (`geom_point()`) and smooth curves (`geom_smooth()`) for visualizing the relationship between two numerical variables where scatterplots are more commonly used.
 
@@ -459,7 +459,7 @@ ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
   geom_point()
 ```
 
-#### Three or more variables
+##### Three or more variables
 
 We can incorporate more variables into a plot by mapping them to additional aesthetics. We could create a scatter plot of two numerical variables, then map color to another variable (preferably categorical), then shape to another variable
 
@@ -499,4 +499,38 @@ ggplot(mpg, aes(x = hwy, y = displ)) +
 
 ggplot(mpg, aes(x = hwy, y = displ)) +
   geom_point(aes(color = cyl, size = cyl))
+
+ggplot(mpg, aes(x = hwy, y = displ)) +
+  geom_point(aes(shape = cyl))
+```
+
+### Data Transformation
+
+```{r}
+#| label: Loading libraries and datasets
+library(nycflights13)
+library(tidyverse)
+
+#
+?nycflights13::flights
+nycflights13::flights
+```
+
+tibbles are designed for large datasets which shows only the columns that fits the rstudio screen. To view all the columns, you can use `print(flights, width = Inf)` or use the `glimpse()` function.
+
+All the dplyr verbs have their individual differences but what they have in common are :
+
+1.  the first argument is a data frame
+2.  the subsequent arguments typically describe which columns to operate on, using the variable names that appear in the data frame (without using quotes)
+3.  The output is always a new data frame with the result from the operation of the dplyr verb
+
+Because each verb does one thing well, solving complex problems will usually require combining multiple verbs hence where the pipe operator becomes very useful.
+
+```{r}
+flights |>
+  filter(dest == "IAH") |> 
+  group_by(year, month, day) |> 
+  summarize(
+    arr_delay = mean(arr_delay, na.rm = TRUE)
+  )
 ```
